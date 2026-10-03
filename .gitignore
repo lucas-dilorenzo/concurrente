@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Config local de herramientas
+.claude/
+
+# Generados (se rehacen desde los .md)
+*.docx
+
+# Material de terceros — no redistribuir sin permiso
+CONCURRENTE PRACTICAS TOMY/
+
+# Material de cátedra — descomentar si el repo es PÚBLICO
+# *.pdf
