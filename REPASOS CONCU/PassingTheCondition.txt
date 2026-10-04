@@ -1,0 +1,54 @@
+
+monitor Fotocopiadora {
+   bool libre = true;
+   cond puedeUsar[N];              // arreglo: hay que despertar a ESE
+   cola colaDeEspera;              // ids, en orden de llegada
+
+   procedure pedir (int id)
+   { if (libre) libre = false;                    // está libre: me la quedo
+     else { push(colaDeEspera, id);               // ocupada: me anoto
+            wait(puedeUsar[id]); }                // y me duermo (if, no while)
+   }
+
+   procedure liberar ()                           // sin parámetros
+   { int sig;
+     if (empty(colaDeEspera)) libre = true;       // no hay nadie: la dejo libre
+     else { pop(colaDeEspera, sig);               // hay fila: saco al primero
+            signal(puedeUsar[sig]); }             // libre SIGUE en false
+   }
+}
+
+Process Persona [id: 1..N]
+{ Fotocopiadora.pedir(id);
+  Fotocopiar();
+  Fotocopiadora.liberar();
+}
+
+c) 
+
+
+
+monitor Fotocopiadora {
+   bool libre = true;
+   cond puedeUsar[N];              // arreglo: hay que despertar a ESE
+   cola colaDeEspera;              // ids, en orden de llegada
+
+   procedure pedir (int id, int edad)
+   { if (libre) libre = false;                          // está libre: me la quedo
+     else { insertarOrdenado(colaDeEspera, id, edad);   // Se guardan ordenados por edad (mayor primero)
+            wait(puedeUsar[id]); }                      // y me duermo (if, no while)
+   }
+
+   procedure liberar ()                           // sin parámetros
+   { int sig;
+     if (empty(colaDeEspera)) libre = true;       // no hay nadie: la dejo libre
+     else { pop(colaDeEspera, sig);               // hay fila: saco al primero
+            signal(puedeUsar[sig]); }             // libre SIGUE en false
+   }
+}
+
+Process Persona [id: 1..N]
+{ Fotocopiadora.pedir(id);
+  Fotocopiar();
+  Fotocopiadora.liberar();
+}

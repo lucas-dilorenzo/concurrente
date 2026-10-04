@@ -1,0 +1,43 @@
+// PRECONDICIONES: U > 0;  la máquina arranca con 100 latas
+
+int latas = 100;                 // sólo lo toca EL QUE TIENE LA MÁQUINA
+bool libre = true;
+cola espera;                     // ids, en orden de llegada
+sem mutex = 1;                   // protege libre y la cola
+sem priv[U] = ([U] 0);           // timbre con nombre
+sem avisarRepositor = 0;         // Usuario → Repositor: "recargá"
+sem recargaLista   = 0;          // Repositor → Usuario: "ya está"
+
+
+Process Usuario [id: 1..U]
+{ int sig;
+
+  // ── 1. CONSEGUIR EL TURNO ── (tu molde de PtB, intacto)
+  P(mutex);
+  if (libre) { libre = false;  V(mutex); }
+  else { push(espera, id);  V(mutex);  P(priv[id]); }
+
+  // ── 2. USAR LA MÁQUINA ── (lo único nuevo)
+  if (latas == 0) {
+     V(avisarRepositor);         // le aviso
+     P(recargaLista);            // y espero — SIN el candado tomado
+  }
+  latas--;
+  SacarLata();
+
+  // ── 3. SOLTAR EL TURNO ── (tu molde de PtB, intacto)
+  P(mutex);
+  if (empty(espera)) libre = true;
+  else { pop(espera, sig);  V(priv[sig]); }
+  V(mutex);
+}
+
+
+Process Repositor
+{ while (true) {                 // sin total conocido: no termina
+     P(avisarRepositor);         // espero que me llamen
+     Reponer();                  // delay — afuera de todo candado
+     latas = 100;
+     V(recargaLista);            // aviso que terminé
+  }
+}

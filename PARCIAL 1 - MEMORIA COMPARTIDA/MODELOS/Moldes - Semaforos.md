@@ -17,6 +17,52 @@
 
 ---
 
+## 🔑 Antes de todo: quién hace el `V` y cuál es el inicial
+
+**Es el error que más caro sale y el más barato de evitar.** Tres pasos mecánicos:
+
+**Paso 1 — Nombrá el semáforo como un HECHO, no como una acción.**
+
+```
+❌ ventaBoleto        →   ✅ hayCliente          ("hay un cliente esperando")
+❌ esperaDeAsiento    →   ✅ tieneAsiento[id]    ("el cliente id ya sabe su asiento")
+```
+
+*Un nombre ambiguo te obliga a adivinar la dirección. Ese es el problema entero.*
+
+**Paso 2 — ¿Quién hace que ese hecho sea VERDAD?** → ése hace **`V`**.
+**Paso 3 — ¿Quién NECESITA que sea verdad para seguir?** → ése hace **`P`**.
+
+**El valor inicial = cuántas veces el hecho YA es verdad al arrancar el programa:**
+
+```
+"hay un cliente esperando"     →  al arrancar no llegó nadie  →  0
+"la fotocopiadora está libre"  →  al arrancar sí está libre   →  1
+"hay lugar para descargar"     →  al arrancar hay 7 lugares   →  7
+```
+
+### El test de 3 segundos
+
+> **¿El `P` y el `V` están en el MISMO proceso?**
+> **SÍ** → es un **permiso**: inicial **1** (candado) o **K** (contador).
+> **NO** → es una **señal**: inicial **0**, siempre.
+
+### Dibujá las flechas antes de escribir
+
+```
+Cliente  ──── "llegué" ────►  Vendedor
+Cliente  ◄── "tu asiento" ──  Vendedor
+```
+
+**Cada flecha es un semáforo en 0. El origen hace `V`, el destino hace `P`.**
+
+Y los dos chequeos que lo cierran:
+
+- **Nunca esperás algo que vos mismo producís.** Si un proceso hace `P` y `V` sobre la misma *señal*, está mal.
+- **Cada señal tiene UN `V` de un lado y UN `P` del otro.**
+
+---
+
 ## Las 4 reglas transversales
 
 1. **El valor inicial lo define quién hace el `V`.** Mismo proceso que el `P` → candado/contador, inicial ≥ 1. **Otro** proceso → señal, inicial **0**.

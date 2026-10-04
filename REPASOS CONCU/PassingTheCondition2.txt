@@ -1,0 +1,31 @@
+Process Vehiculo [id: 1..N]        // PROCESS, no Procedure. Y va AFUERA del monitor
+{ int mi_peso = X;
+  Puente.Entrar(id, mi_peso);      // con PARÁMETROS
+  cruzar();                        // delay, AFUERA del monitor
+  Puente.Salir(mi_peso);
+}
+
+monitor Puente {
+   int peso_total = 0;
+   cola colaDeEspera;     // cola de espera de vehículos
+   int MAX_PESO = 50000;  // peso máximo permitido en el puente
+   cond cruzar[N];        // un timbre con nombre por vehículo
+
+   procedure Entrar (int id, int peso) { 
+    if (peso_total + peso > MAX_PESO) or !colaDeEspera.empty() {  // si no hay espacio o hay vehículos esperando
+        colaDeEspera.push(id,peso);  // el vehículo espera
+        wait(cruzar[id]);                 // espera hasta que pueda entrar
+    } else {  
+      peso_total += peso;     // el vehículo entra al puente
+    }
+   }
+  
+   procedure Salir  (int peso) { 
+    peso_total -= peso;
+    while (!colaDeEspera.empty() && peso_total + colaDeEspera.front().peso <= MAX_PESO) {
+        int id = colaDeEspera.front().id;
+        peso_total += colaDeEspera.front().peso;  // actualiza el peso total
+        colaDeEspera.pop();  // saca al vehículo de la cola
+    Signal(cruzar[id]);  // despierta a un vehículo en espera si hay espacio
+   }
+}     

@@ -1,0 +1,84 @@
+
+En un corralón de materiales se debe atender a N clientes de acuerdo con
+el orden de llegada. Cuando un cliente es llamado para ser atendido, 
+entrega una lista con los productos que comprará, y espera a que alguno
+de los empleados le entregue el comprobante de la compra realizada.
+
+a) El corralón tiene un único empleado.
+b) El corralón tiene E empleados (E > 1). Los empleados no deben 
+terminar su ejecución.
+c) Modifique (b) considerando que los empleados deben terminar su 
+ejecución cuando se hayan atendido todos los clientes.
+
+
+// PRECONDICIONES: N > 0, E >= 1
+//                 cada cliente trae su lista desde el inicio
+
+monitor Corralon {
+   cola colaDeEspera;              // pares {id, lista}, en orden de llegada
+   cond esperaCliente;             // UNA sola: cualquier empleado libre sirve
+   cond esperaEmpleado[N];         // arreglo: hay que despertar a ESE cliente
+
+   comprobante compDe[N];          // el DATO
+   bool soyElUltimo = false;                         // para (c)
+   bool listo[N] = ([N] false);    // la MEMORIA: ¿ya está?
+   cond compListo[N];              // la ESPERA
+   int clientesAtendidos = 0;        // para (c)
+
+   // ── CLIENTE ──
+   procedure hacerFila (int id; lista L; bool soyElUltimo)
+   { push(colaDeEspera, id, L);          // me anoto con mi lista
+     signal(esperaCliente);              // le aviso al empleado que llegué
+     wait(esperaEmpleado[id]);           // pelado: tengo un signal garantizado para mí
+   }
+
+   // ── EMPLEADO ──
+   procedure llamarCliente (out int id; out lista L)
+   { if (empty(colaDeEspera) or not soyElUltimo)         // while, no if: otro empleado puede ganarme
+        wait(esperaCliente);
+     else if (soyElUltimo) {                                 // si soy el último, no espero más clientes
+        id = -1;  L = null;                                 // aviso que no hay más clientes
+        signal_all(esperaCliente);                             // despierto a otro empleado
+        return;                                            // y me voy
+     }
+     pop(colaDeEspera, id, L);           // el primero de la fila, con su lista
+     signal(esperaEmpleado[id]);         // lo llamo
+   }
+
+   // ── EMPLEADO ──
+   procedure entregarComprobante (int id; comprobante C)
+   { compDe[id] = C;                     // guardo el dato
+     clientesAtendidos++;                 // para (c)
+     listo[id] = true;                   // lo REGISTRO ← evita perder la señal
+     soyE1lUltimo = (clientesAtendidos == N);  // para (c)
+     signal(compListo[id]);
+   }
+
+   // ── CLIENTE ──
+   procedure recibirComprobante (int id; out comprobante C)
+   { if (not listo[id])                  // ¿ya está? entonces no espero nada
+        wait(compListo[id]);
+     C = compDe[id];
+   }
+}
+
+
+Process Cliente [id: 1..N]
+{ lista L;  comprobante C;                      // trae su lista desde el inicio
+  Corralon.hacerFila(id, L, soyElUltimo);                   // se anota y espera que lo llamen
+  Corralon.recibirComprobante(id, C);          // espera su comprobante
+}                                              // se retira. Sin while(true)
+
+
+Process Empleado [id: 1..E]                    // en el (a), uno solo
+{ int idCliente;                               // ← el id DEL CLIENTE, distinto del mío
+  lista L;  comprobante C;
+
+  while (true) {                               // el loop va en el PROCESO, no en el monitor
+     Corralon.llamarCliente(idCliente, L);
+     if (idCliente == -1)                           // si no hay más clientes
+        break;                                    // me voy
+     C = procesar(L);                          // AFUERA del monitor (incluye su delay)
+     Corralon.entregarComprobante(idCliente, C);
+  }
+}
