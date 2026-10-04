@@ -1,3 +1,11 @@
+/* ⛔ BORRADOR CON ERRORES — NO ESTUDIAR DE ACÁ ⛔
+
+   Qué está mal: sintaxis de objeto (cola.push) · Signal con mayúscula · falta una llave
+
+   La versión CORREGIDA está en:  PRACTICA/Practica 3 - Ejercicio 4.md
+   (y en PRACTICA/Soluciones.md)
+*/
+
 Process Vehiculo [id: 1..N]        // PROCESS, no Procedure. Y va AFUERA del monitor
 { int mi_peso = X;
   Puente.Entrar(id, mi_peso);      // con PARÁMETROS
