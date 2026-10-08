@@ -14,6 +14,9 @@ Apuntes propios de la cursada: resoluciones comentadas de las prácticas y repas
 | **Decidir qué mecanismo usar** leyendo un enunciado nuevo | [`REPASOS/Pistas de enunciados.md`](REPASOS/Pistas%20de%20enunciados.md) |
 | **Entender un ejercicio en profundidad** | El `.md` individual en [`PRACTICA/`](PRACTICA/) |
 | **Repasar teoría** | [`REPASOS/`](REPASOS/) |
+| **Ver qué toca estudiar cada semana** hasta noviembre | [`Plan de estudio - Octubre-Noviembre.md`](Plan%20de%20estudio%20-%20Octubre-Noviembre.md) |
+
+> **El material de la cátedra no está en el repo** (enunciados, filminas, parciales viejos en PDF): el repo es público. Los `.md` citan los enunciados en el texto.
 
 ---
 
@@ -25,6 +28,7 @@ Apuntes propios de la cursada: resoluciones comentadas de las prácticas y repas
 | [Teoría 2 — Repaso](REPASOS/Teoria%202%20-%20Repaso.md) | Las 4 propiedades de la sección crítica · grano grueso → TS → Tie-Breaker / Ticket / Bakery · barreras (contador, flags y coordinador, árboles, butterfly) |
 | [Clase 3 — Semáforos](REPASOS/Clase%203%20-%20Repaso%20(Semaforos).md) | El semáforo y sus 3 usos según el valor inicial · SBS · contadores de recursos · alocación · **Passing the Baton** · lectores/escritores |
 | [Teoría 4 — Monitores](REPASOS/Teoria%204%20-%20Repaso%20(Monitores).md) | Exclusión mutua implícita vs. sincronización explícita · `wait`/`signal` vs. `P`/`V` · **signal-and-continue y la regla del `while`** · las 6 técnicas · bloquearse dentro de un monitor |
+| [Teorías 5 y 6 — PMA y PMS](REPASOS/Teoria%205%20y%206%20-%20Repaso%20(PMA%20y%20PMS).md) | Qué cambia sin memoria compartida · PMA vs. PMS lado a lado · **moldes base** (A1–A9 de PMA, S1–S5 de PMS) · machete de reconocimiento · mapa de la Práctica 4 · puente a RPC y Rendezvous |
 | [**Pistas de enunciados**](REPASOS/Pistas%20de%20enunciados.md) | **Diccionario frase → mecanismo**, armado sobre los 19 enunciados de las prácticas 1 y 2. Incluye una chuleta de una carilla |
 | [Glosario](REPASOS/Glosario.md) | Términos transversales |
 
@@ -65,19 +69,35 @@ Apuntes propios de la cursada: resoluciones comentadas de las prácticas y repas
 
 *(En progreso — faltan los ejercicios 1, 2, 3, 6, 7, 8, 9 y 10.)*
 
+En [`REPASOS CONCU/`](REPASOS%20CONCU/) están mis escrituras de práctica de los moldes. Los que empiezan con `_BORRADOR CON ERRORES` quedaron así a propósito: **no copiarlos**.
+
+## ✉️ Práctica 4 — Pasaje de mensajes (PMA y PMS)
+
+*(Arrancando.)* Por ahora, el mapa de qué molde va en cada ejercicio está en la sección 5 del [repaso de PMA y PMS](REPASOS/Teoria%205%20y%206%20-%20Repaso%20(PMA%20y%20PMS).md).
+
 ---
 
-## 🎯 Preparación del parcial
+## 🎯 Preparación de los parciales
 
-Carpeta [`PARCIAL 1 - MEMORIA COMPARTIDA/`](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/): enunciados viejos, práctica de repaso y un parcial resuelto de 2022.
+| Fecha | Qué |
+|---|---|
+| 5 oct | Parcial de **Memoria Compartida** (semáforos y monitores) — ya rendido |
+| **9 nov** | Parcial de **Memoria Distribuida** (PMA, PMS y Ada) |
+| **30 nov** | **Fecha 2**, primer recuperatorio. Para promocionar el final, la cursada tiene que estar aprobada a más tardar acá |
+| 14 dic | Fecha 3 y examen de promoción |
 
-Y adentro, [`MODELOS/`](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/) — **lo que conviene tener a mano el día antes**:
+### Memoria Compartida
+
+En [`PARCIAL 1 - MEMORIA COMPARTIDA/MODELOS/`](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/) está **lo que conviene tener a mano el día antes**:
 
 | Archivo | Qué tiene |
 |---|---|
 | [**Moldes — Semáforos**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Moldes%20-%20Semaforos.md) | 11 moldes **ordenados por frecuencia** en los parciales viejos, las 4 reglas transversales y un checklist de entrega |
 | [**Moldes — Monitores**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Moldes%20-%20Monitores.md) | 7 moldes y las 10 reglas que gobiernan todo: los tres tipos de `wait`, la señal perdida, `cond` arreglo vs. sola |
+| [**Molde Coordinador — los dos mecanismos**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Molde%20Coordinador%20-%20los%20dos%20mecanismos.md) | El mismo problema con semáforos y con monitores, y qué cambia al traducir |
 | [**Parcial 2022 — Resuelto**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Parcial%202022%20-%20Resuelto.md) | Los dos ejercicios resueltos y comentados |
+| [**Simulacro 2 — Resuelto**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Simulacro%202%20-%20Resuelto.md) | El micro (semáforos) y la guardia de traumatología (monitores) |
+| [**Parcial 2026 — Resuelto**](PARCIAL%201%20-%20MEMORIA%20COMPARTIDA/MODELOS/Parcial%202026%20-%20Resuelto.md) | El parcial real: sala de ensayo con prioridad (PtB) y viajes compartidos de a 4 (grupos con monitores), con lo que salió bien y mal |
 
 **Dato del formato:** el parcial son **dos ejercicios** —uno de semáforos y uno de monitores— y **no se escribe justificación**: código, precondiciones y comentarios cortos. En los 51 enunciados viejos relevados, **49 piden orden de llegada o prioridad**.
 
@@ -95,5 +115,5 @@ Es el corazón de **Passing the Baton** (semáforos) y **Passing the Condition**
 
 ## Convenciones
 
-- Pseudocódigo con la notación de la cátedra: `P`/`V` para semáforos, `wait`/`signal`/`signalall` para monitores, y operaciones funcionales sobre colas (`push(cola, x)`, `pop(cola, x)`, `empty(cola)`).
+- Pseudocódigo con la notación de la cátedra: `P`/`V` para semáforos, `wait`/`signal`/`signalall` para monitores, `send`/`receive` para PMA, `Destino!port(...)`/`Origen?port(...)` para PMS, y operaciones funcionales sobre colas (`push(cola, x)`, `pop(cola, x)`, `empty(cola)`).
 - Cada `.md` sigue la misma estructura: enunciado → análisis → solución comentada → justificación → errores que se penalizan → chequeos de sanidad.
