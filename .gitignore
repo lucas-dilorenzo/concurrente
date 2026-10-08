@@ -13,5 +13,8 @@
 # Material de terceros — no redistribuir sin permiso
 CONCURRENTE PRACTICAS TOMY/
 
-# Material de cátedra — descomentar si el repo es PÚBLICO
-# *.pdf
+# Material de cátedra — el repo es PÚBLICO: no se sube
+*.pdf
+*.jpg
+*.heic
+.mdd/
